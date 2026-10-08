@@ -1,0 +1,234 @@
+[
+  {
+    "id": "math-2025-01",
+    "source": "2025",
+    "question": "Consider a CNN with input $128\\times 128$ RGB image. Layer 1: $3\\times 3$ conv, stride 1, padding 1. Layer 2: $2\\times 2$ max-pool, stride 2. Layer 3: $3\\times 3$ conv, stride 1, padding 1. What is the spatial dimensionality of the output of the third layer?",
+    "answer": "64 x 64",
+    "accepted": ["64x64", "64×64", "(64,64)", "64, 64", "64 64"],
+    "explanation": "L1: $(128+2-3)/1+1=128$. Pool $2\\times 2$ stride 2: 64. L3: $(64+2-3)/1+1=64$. So $64\\times 64$."
+  },
+  {
+    "id": "math-2025-02",
+    "source": "2025",
+    "question": "Same CNN as above (input $128\\times 128$; L1 $3\\times 3$ s=1 p=1; L2 $2\\times 2$ pool s=2; L3 $3\\times 3$ s=1 p=1), but Layer 3 now uses dilation $d=2$. What is the receptive field size of a neuron in the third layer (in the input)?",
+    "answer": "12 x 12",
+    "accepted": ["12x12", "12×12", "12", "(12,12)"],
+    "explanation": "RF after L1 = 3, jump = 1. After pool: RF = 4, jump = 2. L3 dilated $k=3,d=2$ has effective kernel 5: RF $=4+(5-1)\\cdot 2=12$."
+  },
+  {
+    "id": "math-2025-03",
+    "source": "2025",
+    "question": "Policy $\\pi_\\theta(a)=e^{\\theta a}/\\sum_{a'}e^{\\theta a'}$ with $\\mathcal{A}=\\{1,2\\}$, rewards $R(1)=4$, $R(2)=8$. Compute $\\nabla_\\theta J(\\theta)=\\nabla_\\theta\\mathbb{E}_{a\\sim\\pi_\\theta}[R(a)]$.",
+    "answer": "4e^{3theta}/(e^theta+e^{2theta})^2",
+    "accepted": ["4e^{3θ}/(e^θ+e^{2θ})^2", "4*e^(3theta)/(e^theta+e^(2theta))^2", "4e^{3θ} / (e^θ+e^{2θ})^2"],
+    "explanation": "Using $\\nabla\\log\\pi(a)=a-\\mathbb{E}[a']$ and direct algebra, the expression collapses to $\\dfrac{4e^{3\\theta}}{(e^\\theta+e^{2\\theta})^2}$."
+  },
+  {
+    "id": "math-2025-04",
+    "source": "2025",
+    "question": "Fill in the VAE ELBO decomposition: $\\mathcal{L}(q,p)=\\mathbb{E}_{q(z|x)}[\\log p_a]+\\mathbb{E}_{p_b}\\big[\\log\\tfrac{p_c}{q(z|x)}\\big]$. What are $p_a,p_b,p_c$?",
+    "answer": "p_a=p(x|z), p_b=q(z|x), p_c=p(z)",
+    "accepted": ["p(x|z), q(z|x), p(z)", "p(x|z); q(z|x); p(z)"],
+    "explanation": "Standard ELBO $=\\mathbb{E}_q[\\log p(x|z)] - \\mathrm{KL}(q(z|x)\\|p(z))$, which equals $\\mathbb{E}_q[\\log p(x|z)] + \\mathbb{E}_q[\\log(p(z)/q(z|x))]$."
+  },
+  {
+    "id": "math-2025-05",
+    "source": "2025",
+    "question": "In WGAN, the Kantorovich-Rubinstein duality expresses $W_1(P_r,P_g)$ as a supremum over which function class?",
+    "answer": "sup over 1-Lipschitz f of E_Pr[f] - E_Pg[f]",
+    "accepted": ["sup_{||f||_Lip<=1} E_{P_r}[f]-E_{P_g}[f]", "supremum over 1-Lipschitz functions", "1-Lipschitz f"],
+    "explanation": "Kantorovich-Rubinstein: $W_1(P,Q)=\\sup_{\\|f\\|_{\\mathrm{Lip}}\\le 1}(\\mathbb{E}_P[f]-\\mathbb{E}_Q[f])$."
+  },
+  {
+    "id": "math-2024-01",
+    "source": "2024",
+    "question": "A 3-hidden-layer CNN has input $128\\times 128$ RGB. L1: 32 kernels $8\\times 8$, stride 2, padding 3. L2: $2\\times 2$ non-overlapping max pool. L3: 64 kernels $3\\times 3$, stride 1, padding 1. What is the output dimensionality (including channels) of the third layer?",
+    "answer": "32 x 32 x 64",
+    "accepted": ["32x32x64", "32×32×64", "32 x 32", "32x32"],
+    "explanation": "L1: $(128+6-8)/2+1=64$. Pool: 32. L3: $(32+2-3)/1+1=32$. With 64 filters: $32\\times 32\\times 64$."
+  },
+  {
+    "id": "math-2024-02",
+    "source": "2024",
+    "question": "Same 3-layer CNN (L1: 32 filters $8\\times 8$ s=2 p=3; L2 $2\\times 2$ pool; L3: 64 filters $3\\times 3$ s=1 p=1). Not including biases, how many parameters are in the last (third) layer?",
+    "answer": "18432",
+    "accepted": ["18,432", "64*32*3*3", "64*32*9", "64 * 32 * 9"],
+    "explanation": "$64\\text{ out}\\times 32\\text{ in}\\times 3\\times 3 = 18432$."
+  },
+  {
+    "id": "math-2024-03",
+    "source": "2024",
+    "question": "Write the REINFORCE estimator for $\\nabla_\\theta\\mathbb{E}_{\\hat s\\sim p_\\theta}[R(\\hat s)]$.",
+    "answer": "E_{s~p_theta}[R(s) * grad_theta log p_theta(s)]",
+    "accepted": ["E[R(s) nabla log p_theta(s)]", "E[R(s) * grad log p_theta(s)]", "R(s) nabla log p_theta(s)"],
+    "explanation": "Log-derivative trick: $\\nabla\\mathbb{E}_{p_\\theta}[R]=\\mathbb{E}_{p_\\theta}[R\\,\\nabla\\log p_\\theta]$."
+  },
+  {
+    "id": "math-2024-04",
+    "source": "2024",
+    "question": "In WGAN (Lipschitz-1 critic) with $D(x;\\psi_0,\\psi_1)=\\psi_0(x+2)^2+\\psi_1(x-1)^2$, $\\mathbb{P}=\\delta_0$, $\\mathbb{Q}=\\delta_1$, find $(\\psi_0,\\psi_1)$ that maximize $\\mathbb{E}_\\mathbb{P}[D]-\\mathbb{E}_\\mathbb{Q}[D]$.",
+    "answer": "(-1/6, 1/6)",
+    "accepted": ["psi_0=-1/6, psi_1=1/6", "(-1/6,1/6)", "-1/6, 1/6"],
+    "explanation": "Lipschitz-1 forces $\\psi_0+\\psi_1=0$ and $|6\\psi_0|\\le 1$. Objective $=-5\\psi_0+\\psi_1=-6\\psi_0$, max at $\\psi_0=-1/6$, $\\psi_1=1/6$."
+  },
+  {
+    "id": "math-2024-05",
+    "source": "2024",
+    "question": "In DDPM, the per-timestep training loss is the KL divergence between which two densities at step $t$?",
+    "answer": "q(x_{t-1}|x_t,x_0) and p_theta(x_{t-1}|x_t)",
+    "accepted": ["KL(q(x_{t-1}|x_t,x_0) || p_theta(x_{t-1}|x_t))", "q(x_{t-1}|x_t,x_0), p_theta(x_{t-1}|x_t)"],
+    "explanation": "Per-step loss = KL between the tractable posterior $q(x_{t-1}|x_t,x_0)$ and the learned reverse $p_\\theta(x_{t-1}|x_t)$."
+  },
+  {
+    "id": "math-2024-06",
+    "source": "2024",
+    "question": "In the DDPM variational upper bound $\\mathbb{E}_{q(x_0)}[-\\log p_\\theta(x_0)] = \\mathbb{E}_q\\big[-\\log\\tfrac{p_\\theta(x_{0:T})}{q(x_{1:T}|x_0)}\\big]+C$, what is $C$?",
+    "answer": "-KL(q(x_{1:T}|x_0) || p_theta(x_{1:T}|x_0))",
+    "accepted": ["-D_KL(q(x_{1:T}|x_0) || p_theta(x_{1:T}|x_0))", "-KL(q || p) (<=0)"],
+    "explanation": "The gap between NLL and the upper bound is $-\\mathrm{KL}$, which is $\\le 0$."
+  },
+  {
+    "id": "math-2023-01",
+    "source": "2023",
+    "question": "3-hidden-layer CNN, input $128\\times 128$ RGB. L1: 64 kernels $5\\times 5$, stride 2, padding 1. L2: $2\\times 2$ non-overlapping max pool. L3: 128 kernels $3\\times 3$, stride 2, padding 2. What is the output dimensionality of the third layer (with channels)?",
+    "answer": "17 x 17 x 128",
+    "accepted": ["17x17x128", "17×17×128", "17 x 17"],
+    "explanation": "L1: $(128+2-5)/2+1=63$. Pool: $\\lfloor 63/2\\rfloor=31$. L3: $(31+4-3)/2+1=17$. With 128 filters: $17\\times 17\\times 128$."
+  },
+  {
+    "id": "math-2023-02",
+    "source": "2023",
+    "question": "Same 2023 CNN (L1: 64 filters $5\\times 5$ s=2 p=1; L2 pool $2\\times 2$; L3: 128 filters $3\\times 3$ s=2 p=2). Not including biases, how many parameters in the last layer?",
+    "answer": "73728",
+    "accepted": ["73,728", "128*64*9", "128*64*3*3"],
+    "explanation": "$128\\text{ out}\\times 64\\text{ in}\\times 3\\times 3 = 73728$."
+  },
+  {
+    "id": "math-2023-03",
+    "source": "2023",
+    "question": "Compute the full 1D convolution (without kernel flipping) of $x=[2,3,4,5]$ with $W=[1,2,1]$.",
+    "answer": "[2, 7, 12, 16, 14, 5]",
+    "accepted": ["2,7,12,16,14,5", "(2,7,12,16,14,5)", "2 7 12 16 14 5"],
+    "explanation": "Length $N+K-1=6$. Entries: $2$; $2\\cdot 2+3=7$; $2+3\\cdot 2+4=12$; $3+4\\cdot 2+5=16$; $4+5\\cdot 2=14$; $5$."
+  },
+  {
+    "id": "math-2023-04",
+    "source": "2023",
+    "question": "Compute the valid 1D convolution (without kernel flipping) of $x=[2,3,4,5]$ with $W=[1,2,1]$.",
+    "answer": "[12, 16]",
+    "accepted": ["12,16", "(12,16)", "12 16"],
+    "explanation": "Valid length $N-K+1=2$: $y_0=2+6+4=12$; $y_1=3+8+5=16$."
+  },
+  {
+    "id": "math-2023-05",
+    "source": "2023",
+    "question": "Compute the same 1D convolution (without kernel flipping) of $x=[2,3,4,5]$ with $W=[1,2,1]$.",
+    "answer": "[7, 12, 16, 14]",
+    "accepted": ["7,12,16,14", "(7,12,16,14)", "7 12 16 14"],
+    "explanation": "Same length $=N=4$, the middle of the full output."
+  },
+  {
+    "id": "math-2022-01",
+    "source": "2022",
+    "question": "For an RNN with $\\hat y_t=q^\\top h_t+r^\\top h_{t-1}$ and loss $L=\\tfrac12\\sum_t(y_t-\\hat y_t)^2$, what is $\\nabla_{\\hat y_t}L$?",
+    "answer": "hat{y}_t - y_t",
+    "accepted": ["\\hat y_t - y_t", "yhat_t - y_t", "-(y_t - hat{y}_t)", "y_hat - y"],
+    "explanation": "Derivative of $\\tfrac12(y-\\hat y)^2$ with respect to $\\hat y$ is $\\hat y-y$."
+  },
+  {
+    "id": "math-2022-02",
+    "source": "2022",
+    "question": "Configure a conv layer so that input spatial size 64 maps to output 32 with kernel $k=8$ (no dilation). Find integer $p,s$ satisfying $32=\\lfloor(64+2p-8)/s\\rfloor+1$.",
+    "answer": "p=3, s=2",
+    "accepted": ["p=3,s=2", "(3,2)", "3,2", "p = 3, s = 2"],
+    "explanation": "$(64+6-8)/2+1=62/2+1=32$. ✓"
+  },
+  {
+    "id": "math-2019-01",
+    "source": "2019",
+    "question": "Convolving a $(32,32)$ feature map with a $3\\times 4$ kernel, stride 2, no zero-padding yields a feature map of what spatial size?",
+    "answer": "(15, 15)",
+    "accepted": ["15x15", "15 x 15", "15,15", "(15,15)", "15"],
+    "explanation": "Height: $\\lfloor(32-3)/2\\rfloor+1=15$. Width: $\\lfloor(32-4)/2\\rfloor+1=15$."
+  },
+  {
+    "id": "math-2019-02",
+    "source": "2019",
+    "question": "The variational gap $\\log p_\\theta(x)-\\mathcal{L}[q_\\phi]$ equals which quantity?",
+    "answer": "KL(q_phi(z|x) || p_theta(z|x))",
+    "accepted": ["D_KL(q(z|x)||p(z|x))", "KL(q||p) between approx and true posterior", "KL(q_phi || p_theta)"],
+    "explanation": "Classical VAE identity: $\\log p(x) = \\mathrm{ELBO} + \\mathrm{KL}(q(z|x)\\|p(z|x))$."
+  },
+  {
+    "id": "math-2019-03",
+    "source": "2019",
+    "question": "For a linear autoencoder with tied weights $\\tilde x=W^\\top W x$, $h(x)=Wx$, write the Contractive Autoencoder (CAE) loss using squared reconstruction error and Frobenius-squared Jacobian penalty.",
+    "answer": "||x - W^T W x||^2 + lambda ||W||_F^2",
+    "accepted": ["(x - W^TWx)^T(x - W^TWx) + lambda ||W||_F^2", "||x-tilde x||^2 + lambda||W||_F^2"],
+    "explanation": "Jacobian of $h(x)=Wx$ is $W$, so $\\|\\nabla_x h\\|_F^2=\\|W\\|_F^2$ — equivalent to weight decay."
+  },
+  {
+    "id": "math-2019-04",
+    "source": "2019",
+    "question": "The IWAE bound with $K$ samples reduces to the standard ELBO when $K=?$",
+    "answer": "1",
+    "accepted": ["K=1", "one", "K = 1"],
+    "explanation": "For $K=1$ the inner average is a single ratio and its log is the ELBO integrand."
+  },
+  {
+    "id": "math-2019-05",
+    "source": "2019",
+    "question": "For softmax $y=S(x)$ and cross-entropy $L(x,c)=-\\sum_i c_i\\log y_i$ with one-hot target $c$, what is $\\nabla_x L$?",
+    "answer": "y - c",
+    "accepted": ["S(x) - c", "softmax(x) - c", "hat y - c", "p - c"],
+    "explanation": "Gradient of softmax+CE wrt logits equals (softmax output) − (one-hot target)."
+  },
+  {
+    "id": "math-2018-01",
+    "source": "2018",
+    "question": "A 6-layer CNN operates on a $256\\times 256$ image; each layer uses $5\\times 5$ kernels with $2\\times 2$ zero-padding and stride 1. What is the effective receptive field of a neuron in the 6th layer?",
+    "answer": "25 x 25",
+    "accepted": ["25x25", "25", "25×25", "(25,25)"],
+    "explanation": "With stride 1 and $k=5$, each layer adds $k-1=4$ to the RF: $1+6\\cdot 4=25$."
+  },
+  {
+    "id": "math-2018-02",
+    "source": "2018",
+    "question": "In a 3-layer EBM with $P(x,y,z)\\propto\\exp(-\\sum_{ijk}W_{ijk}x_iy_jz_k)$ over binary $x,y,z$, which sets of variables can be sampled in parallel during block-Gibbs?",
+    "answer": "{x_i}, {y_j}, {z_k} — each block given the other two",
+    "accepted": ["x | y,z;  y | x,z;  z | x,y", "block-Gibbs over x, y, z (3 blocks)", "x, y, z blocks"],
+    "explanation": "Conditioning on two blocks makes the energy linear in the third, so its conditional fully factorizes over coordinates."
+  },
+  {
+    "id": "math-2017-01",
+    "source": "2017",
+    "question": "Compute the full 1D convolution (with kernel flipping) of input $[1,2,3,4]$ with kernel $[1,0,2]$.",
+    "answer": "[2, 4, 7, 10, 3, 4]",
+    "accepted": ["2,4,7,10,3,4", "(2,4,7,10,3,4)", "2 4 7 10 3 4"],
+    "explanation": "Flipped kernel is $[2,0,1]$. Full length 6: $2; 4; 1+6=7; 2+8=10; 3; 4$."
+  },
+  {
+    "id": "math-2017-02",
+    "source": "2017",
+    "question": "Compute the valid 1D convolution (with kernel flipping) of $[1,2,3,4]$ with $[1,0,2]$.",
+    "answer": "[7, 10]",
+    "accepted": ["7,10", "(7,10)", "7 10"],
+    "explanation": "Valid length $N-K+1=2$: middle entries of the full output, $7$ and $10$."
+  },
+  {
+    "id": "math-2017-03",
+    "source": "2017",
+    "question": "For binary classification with sigmoid output $f=\\sigma(a)$ and cross-entropy loss with target $y\\in\\{0,1\\}$, what is $\\partial L_{CE}/\\partial a$?",
+    "answer": "f - y",
+    "accepted": ["sigma(a) - y", "hat y - y", "p - y"],
+    "explanation": "Sigmoid + binary cross-entropy: gradient wrt the pre-activation equals (prediction − target)."
+  },
+  {
+    "id": "math-2017-04",
+    "source": "2017",
+    "question": "For the LSTM variant $c_t = f_t(1-f_t)c_{t-1} + \\tanh(W_c x_t + U_c h_{t-1} + b_c)$, with scalars and $c_{-1}=h_{-1}=0$, compute $\\partial c_0/\\partial x_0$.",
+    "answer": "W_c (1 - tanh^2(W_c x_0 + b_c))",
+    "accepted": ["W_c * (1 - tanh^2(W_c x_0 + b_c))", "W_c sech^2(W_c x_0 + b_c)"],
+    "explanation": "With $c_{-1}=h_{-1}=0$, $c_0=\\tanh(W_c x_0+b_c)$; derivative wrt $x_0$ is $W_c(1-\\tanh^2(W_c x_0+b_c))$."
+  }
+]

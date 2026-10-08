@@ -1,0 +1,330 @@
+[
+  {
+    "id": "mcq-2025-01",
+    "source": "2025",
+    "question": "Self-attention backprop. Consider a single-head scaled dot-product self-attention with input $X\\in\\mathbb{R}^{N\\times d_{model}}$ and weights $W_Q,W_K,W_V$, with $Q=XW_Q$, $K=XW_K$, $V=XW_V$, $A=\\mathrm{softmax}(QK^\\top/\\sqrt{d_k})$, $O=AV$. Given $G_O=\\partial L/\\partial O$, which expression correctly gives $\\partial L/\\partial W_Q$?",
+    "options": [
+      "A) $X^\\top(G_O V^\\top\\odot A)\\,K^\\top/\\sqrt{d_k}$",
+      "B) $X^\\top\\big[((G_O V^\\top)\\odot A) - A\\odot((G_O V^\\top)\\odot A)\\mathbf{1}\\big]\\,K/\\sqrt{d_k}$",
+      "C) $X^\\top\\big[(G_O V^\\top) - ((G_O V^\\top)\\odot A^\\top)\\big]\\,K/\\sqrt{d_k}$",
+      "D) $X^\\top(G_O K)\\odot A\\cdot 1/\\sqrt{d_k}$"
+    ],
+    "answer": "B",
+    "explanation": "Backprop through row-wise softmax yields $\\mathrm{diag}(A_i)-A_iA_i^\\top$, producing $((G_OV^\\top)\\odot A) - A\\odot((G_OV^\\top)\\odot A)\\mathbf{1}$. Multiplying by $\\partial Z/\\partial Q = K/\\sqrt{d_k}$ and $X^\\top$ on the left gives the gradient w.r.t. $W_Q$."
+  },
+  {
+    "id": "mcq-2025-02",
+    "source": "2025",
+    "question": "Feed-forward sublayer backprop. $z=hW_1+b_1$, $a=\\sigma(z)$, $y=aW_2+b_2$. Let $\\delta_y=\\partial L/\\partial y$. Which expression gives $\\partial L/\\partial W_1$?",
+    "options": [
+      "A) $h^\\top(\\delta_y\\odot\\sigma'(z))W_2^\\top$",
+      "B) $(\\sigma'(z)\\odot(\\delta_y W_2^\\top))^\\top h$",
+      "C) $h^\\top\\big(\\delta_y W_2^\\top\\odot\\sigma'(z)\\big)$",
+      "D) $h\\odot(\\delta_y W_2^\\top\\sigma'(z))$"
+    ],
+    "answer": "C",
+    "explanation": "Chain rule: $\\partial L/\\partial a=\\delta_y W_2^\\top$, $\\partial L/\\partial z=(\\delta_y W_2^\\top)\\odot\\sigma'(z)$, then $\\partial L/\\partial W_1 = h^\\top(\\partial L/\\partial z)$."
+  },
+  {
+    "id": "mcq-2025-03",
+    "source": "2025",
+    "question": "LayerNorm backprop. LN produces $\\hat x_i=(x_i-\\mu)/\\sqrt{\\sigma^2+\\epsilon}$ and $y_i=\\gamma\\hat x_i+\\beta$. With $\\delta_i=\\partial L/\\partial y_i$, which is the correct $\\partial L/\\partial x_i$?",
+    "options": [
+      "A) $\\frac{\\gamma}{\\sqrt{\\sigma^2+\\epsilon}}\\left(\\delta_i-\\frac{1}{d}\\sum_j\\delta_j-\\frac{\\hat x_i}{d}\\sum_j\\delta_j\\hat x_j\\right)$",
+      "B) $\\frac{\\gamma}{\\sqrt{\\sigma^2+\\epsilon}}\\left(\\delta_i-\\frac{1}{d}\\sum_j\\delta_j\\right)$",
+      "C) $\\frac{\\gamma}{\\sigma^2+\\epsilon}\\left(\\delta_i-\\frac{1}{d}\\sum_j\\delta_j-\\frac{x_i-\\mu}{\\sigma^2+\\epsilon}\\sum_j\\delta_j(x_j-\\mu)\\right)$",
+      "D) $\\frac{1}{\\sqrt{\\sigma^2+\\epsilon}}\\left(\\delta_i-\\frac{1}{d}\\sum_j\\delta_j-\\frac{\\hat x_i}{d}\\sum_j\\delta_j\\hat x_j\\right)$"
+    ],
+    "answer": "A",
+    "explanation": "Accounting for the dependence of $\\mu$ and $\\sigma^2$ on every $x_j$ gives three terms scaled by $\\gamma/\\sqrt{\\sigma^2+\\epsilon}$: pointwise, mean-correction, and variance-correction along $\\hat x_i$."
+  },
+  {
+    "id": "mcq-2025-04",
+    "source": "2025",
+    "question": "Which statement accurately explains a common issue with deep Transformers and how to address it?",
+    "options": [
+      "A) Vanishing gradients occur because dot products become too small; fix by increasing key dimensionality.",
+      "B) Softmax can concentrate attention on a few tokens; mitigated by multi-head attention over different subspaces.",
+      "C) Deep attention weights become uniform due to repeated softmax; fix by reducing softmax temperature.",
+      "D) Fixed positional encodings break depth; fix by replacing them with relative positional encodings."
+    ],
+    "answer": "B",
+    "explanation": "Single-head softmax tends to peak on a few tokens. Multi-head attention lets the model attend to different subspaces in parallel, alleviating over-concentration."
+  },
+  {
+    "id": "mcq-2025-05",
+    "source": "2025",
+    "question": "What is the primary advantage of relative positional embeddings over absolute ones in Transformers?",
+    "options": [
+      "A) They remove the fixed-length requirement on input sequences.",
+      "B) They reduce attention complexity from quadratic to linear.",
+      "C) They lower the dimensionality of the positional representation.",
+      "D) They generalize better to variable-length or shifted contexts by encoding position differences."
+    ],
+    "answer": "D",
+    "explanation": "Relative embeddings encode offsets $i-j$, so the model generalizes to longer/shifted contexts unseen at training time."
+  },
+  {
+    "id": "mcq-2025-06",
+    "source": "2025",
+    "question": "What is the fundamental advantage of Transformer-XL over standard Transformers?",
+    "options": [
+      "A) It caches hidden states across segments via a recurrence, enabling long-range dependencies without recomputing prior-segment attention.",
+      "B) It uses a fixed-length context window that prevents information loss.",
+      "C) It reduces the dimensionality of inputs via relative position encodings.",
+      "D) It reduces self-attention to linear complexity by truncating the attention matrix."
+    ],
+    "answer": "A",
+    "explanation": "Transformer-XL caches hidden states from the previous segment and reuses them through a recurrence, extending effective context beyond a single segment."
+  },
+  {
+    "id": "mcq-2025-07",
+    "source": "2025",
+    "question": "Consider stochastic policy $\\pi_\\theta(a)=e^{\\theta a}/\\sum_{a'}e^{\\theta a'}$ with $\\mathcal{A}=\\{1,2\\}$, rewards $R(1)=4,R(2)=8$. Using REINFORCE, what is $\\nabla_\\theta J(\\theta)$?",
+    "options": [
+      "A) $\\dfrac{4e^\\theta+8e^{2\\theta}}{(e^\\theta+e^{2\\theta})^2}$",
+      "B) $\\dfrac{4e^\\theta+16e^{3\\theta}}{(e^\\theta+e^{2\\theta})^3}$",
+      "C) $\\dfrac{4e^{3\\theta}}{(e^\\theta+e^{2\\theta})^2}$",
+      "D) $\\dfrac{4e^\\theta(e^\\theta+2e^{2\\theta})}{(e^\\theta+e^{2\\theta})^2}$"
+    ],
+    "answer": "C",
+    "explanation": "$J(\\theta)=4\\pi(1)+8\\pi(2)$. Direct differentiation yields $4e^{3\\theta}/(e^\\theta+e^{2\\theta})^2$."
+  },
+  {
+    "id": "mcq-2025-08",
+    "source": "2025",
+    "question": "When fine-tuning LLMs with RLHF, what is the main advantage of using LoRA?",
+    "options": [
+      "A) It increases expressive power by adding many trainable parameters.",
+      "B) It restricts updates to a low-rank subspace, enabling efficient fine-tuning while preserving pretrained capabilities.",
+      "C) It incorporates human preference scores directly into the parameterization.",
+      "D) It replaces policy gradient, making RLHF redundant."
+    ],
+    "answer": "B",
+    "explanation": "LoRA parameterizes $\\Delta W=BA$ (low rank), drastically reducing trainable parameters while leaving the pretrained backbone intact."
+  },
+  {
+    "id": "mcq-2025-09",
+    "source": "2025",
+    "question": "Which statement correctly captures a key difference between SimCLR and BYOL?",
+    "options": [
+      "A) Both require explicit negative pairs; BYOL additionally uses a momentum encoder.",
+      "B) Both use symmetric contrastive losses; BYOL adds a temperature parameter.",
+      "C) SimCLR uses a momentum encoder while BYOL relies on batch normalization to avoid collapse.",
+      "D) SimCLR uses negative pairs via a contrastive loss; BYOL does not, aligning online and target networks without negatives."
+    ],
+    "answer": "D",
+    "explanation": "SimCLR uses InfoNCE with positives vs negatives. BYOL avoids negatives, aligning an online predictor to a slow-moving target (EMA) network, preventing collapse via asymmetry (predictor + stop-gradient)."
+  },
+  {
+    "id": "mcq-2025-10",
+    "source": "2025",
+    "question": "DDPM forward process $q(x_t|x_{t-1})=\\mathcal{N}(x_t;\\sqrt{1-\\beta_t}x_{t-1},\\beta_t I)$. Which is true about the reverse $p_\\theta(x_{t-1}|x_t)$?",
+    "options": [
+      "A) It is a deterministic function to invert the forward process exactly.",
+      "B) It is modeled as a Gaussian with learned mean and fixed variance.",
+      "C) It must condition on all $x_0,\\dots,x_{t-1}$.",
+      "D) It shares parameters/structure with the forward process for symmetry."
+    ],
+    "answer": "B",
+    "explanation": "Ho et al. parameterize $p_\\theta(x_{t-1}|x_t)=\\mathcal{N}(x_{t-1};\\mu_\\theta(x_t,t),\\sigma_t^2 I)$ with learned mean and schedule-determined variance."
+  },
+  {
+    "id": "mcq-2025-11",
+    "source": "2025",
+    "question": "The DDPM ELBO is $\\mathbb{E}_q[\\log p_\\theta(x_0)-\\sum_t D_{KL}(q(x_{t-1}|x_t,x_0)\\|p_\\theta(x_{t-1}|x_t))]$. What best describes how this enables training?",
+    "options": [
+      "A) It matches reverse-process outputs to the training distribution via a reconstruction loss.",
+      "B) It maximizes the likelihood of each noise sample independently.",
+      "C) It uses the tractable posterior $q(x_{t-1}|x_t,x_0)$ as a per-step target and penalizes deviation of the learned reverse.",
+      "D) It computes the JSD between forward and reverse trajectories."
+    ],
+    "answer": "C",
+    "explanation": "The tractable Gaussian posterior $q(x_{t-1}|x_t,x_0)$ provides per-step targets; KL terms penalize $p_\\theta(x_{t-1}|x_t)$ for deviating from them."
+  },
+  {
+    "id": "mcq-2025-12",
+    "source": "2025",
+    "question": "Diffusion models often reparameterize the reverse process as predicting noise $\\epsilon$ from $x_t=\\sqrt{\\bar\\alpha_t}x_0+\\sqrt{1-\\bar\\alpha_t}\\epsilon$. Why is this advantageous?",
+    "options": [
+      "A) It allows cross-entropy instead of KL divergence.",
+      "B) It avoids computing forward-process variance.",
+      "C) It yields a simple tractable MSE objective aligned with the variational bound.",
+      "D) It decouples denoising from generation, enabling parallel sampling."
+    ],
+    "answer": "C",
+    "explanation": "The per-step KL reduces (up to constants) to a weighted MSE between true and predicted noise — the simple $L_2$ objective DDPM actually minimizes."
+  },
+  {
+    "id": "mcq-2025-13",
+    "source": "2025",
+    "question": "In a modified CLIP setup we contrast joint embedding $f(I,T)$ with text embedding $g(T)$. To avoid both collapse and the degenerate solution where $f$ ignores $I$, which sampling is appropriate?",
+    "options": [
+      "A) Positive $(f(I_i,T_i), g(T_i))$; negatives $(f(I_i,T_{j\\ne i}), g(T_{j\\ne i}))$.",
+      "B) Positive $(f(I_i,T_i), f(I_j,T_j))$; negatives $(g(T_i), g(T_j))$.",
+      "C) Positive $(f(I_i,T_i), g(T_i))$; negatives $(g(T_i), g(T_j))$.",
+      "D) Positive $(f(I_i,T_j), g(T_i))$ with $I_j\\sim I_i$; negatives $(f(I_i,T_{j\\ne i}), g(T_{j\\ne i}))$."
+    ],
+    "answer": "A",
+    "explanation": "Matching $f(I_i,T_i)$ to $g(T_i)$ while contrasting with $f(I_i,T_{j\\ne i})$ forces $f$ to use $I$; negatives $g(T_{j\\ne i})$ prevent collapse."
+  },
+  {
+    "id": "mcq-2024-01",
+    "source": "2024",
+    "question": "Bidirectional RNN with $h_t^{(f)}=\\sigma(W^{(f)}x_t+U^{(f)}h_{t-1}^{(f)})$, output $y_t=V^{(f)}h_t^{(f)}+V^{(b)}h_t^{(b)}$. Which gives $\\nabla_{h_t^{(f)}}L$ recursively?",
+    "options": [
+      "A) $\\nabla_{h_t^{(f)}}L_{t+1}+(\\mathrm{diag}(h_t^{(f)}(1-h_t^{(f)}))U^{(f)})^\\top\\nabla_{h_{t+1}^{(f)}}L$",
+      "B) $\\nabla_{h_t^{(f)}}L_t+(\\mathrm{diag}(h_{t+1}^{(f)}(1-h_{t+1}^{(f)}))U^{(f)})^\\top\\nabla_{h_{t+1}^{(f)}}L$",
+      "C) $\\nabla_{h_t^{(f)}}L_{t+1}+(\\mathrm{diag}(h_t^{(f)}(1-h_t^{(f)}))U^{(f)})^\\top\\nabla_{h_{t+1}^{(f)}}L$",
+      "D) $\\nabla_{h_t^{(f)}}L_{t+1}+(\\mathrm{diag}(h_{t+1}^{(f)}(1-h_{t+1}^{(f)}))U^{(f)})^\\top\\nabla_{h_{t+1}^{(f)}}L$"
+    ],
+    "answer": "D",
+    "explanation": "The sigmoid derivative at step $t+1$ is $h_{t+1}^{(f)}(1-h_{t+1}^{(f)})$; the recurrent matrix $U^{(f)}$ multiplies it, and $L_{t+1}$ captures the future-steps' contribution."
+  },
+  {
+    "id": "mcq-2024-02",
+    "source": "2024",
+    "question": "For the same bidirectional RNN (sigmoid), express $\\nabla_{W^{(f)}}L$:",
+    "options": [
+      "A) $\\sum_t\\mathrm{diag}(h_{t+1}^{(f)}(1-h_{t+1}^{(f)}))(\\nabla_{h_{t+1}^{(f)}}L)x_t^\\top$",
+      "B) $\\sum_t\\mathrm{diag}(h_t^{(f)}(1-h_t^{(f)}))(\\nabla_{h_{t+1}^{(f)}}L)x_{t+1}^\\top$",
+      "C) $\\sum_t\\mathrm{diag}(h_{t+1}^{(f)}(1-h_{t+1}^{(f)}))(\\nabla_{h_{t+1}^{(f)}}L)x_{t+1}^\\top$",
+      "D) $\\sum_t\\mathrm{diag}(h_t^{(f)}(1-h_t^{(f)}))(\\nabla_{h_t^{(f)}}L)x_t^\\top$"
+    ],
+    "answer": "D",
+    "explanation": "$\\partial h_t^{(f)}/\\partial W^{(f)}=\\mathrm{diag}(h_t^{(f)}(1-h_t^{(f)}))x_t^\\top$; summing over $t$ and chaining with $\\nabla_{h_t^{(f)}}L$ gives the total gradient."
+  },
+  {
+    "id": "mcq-2024-03",
+    "source": "2024",
+    "question": "RLHF: to maximize $\\mathbb{E}_{\\hat s\\sim p_\\theta}[R(\\hat s)]$, which expression gives the REINFORCE gradient?",
+    "options": [
+      "A) $\\mathbb{E}_{\\hat s\\sim p_\\theta}[R(\\hat s)\\nabla_\\theta\\log p_\\theta(\\hat s)]$",
+      "B) $\\mathbb{E}_{\\hat s\\sim p_\\theta}[\\nabla_\\theta R(\\hat s)]$",
+      "C) $\\nabla_\\theta\\mathbb{E}_{\\hat s\\sim p_\\theta}[\\log p_\\theta(\\hat s)]$",
+      "D) $\\mathbb{E}_{\\hat s\\sim p_\\theta}[\\log R(\\hat s)\\nabla_\\theta p_\\theta(\\hat s)]$"
+    ],
+    "answer": "A",
+    "explanation": "Log-derivative trick: $\\nabla_\\theta\\mathbb{E}_{p_\\theta}[R]=\\mathbb{E}_{p_\\theta}[R(\\hat s)\\nabla_\\theta\\log p_\\theta(\\hat s)]$."
+  },
+  {
+    "id": "mcq-2024-04",
+    "source": "2024",
+    "question": "Why is the Bradley-Terry model used to train the RLHF reward model?",
+    "options": [
+      "A) Humans produce calibrated absolute scalar scores.",
+      "B) Pairwise comparisons are more reliable than absolute ratings; Bradley-Terry converts them to a latent reward via $P(a\\succ b)=\\sigma(r(a)-r(b))$.",
+      "C) It guarantees rewards are bounded in $[0,1]$.",
+      "D) It removes the need for a value function in PPO."
+    ],
+    "answer": "B",
+    "explanation": "Pairwise preferences are more reliable than absolute scores; Bradley-Terry models $P(a\\succ b)$ as a sigmoid of reward differences."
+  },
+  {
+    "id": "mcq-2024-05",
+    "source": "2024",
+    "question": "WGAN with critic $D(x;\\psi_0,\\psi_1)=\\psi_0(x+2)^2+\\psi_1(x-1)^2$ under $\\|D\\|_{\\mathrm{Lip}}\\le 1$; Dirac game $\\mathbb{P}=\\delta_0,\\mathbb{Q}=\\delta_1$. Which choice maximizes $\\mathbb{E}_\\mathbb{P}[D]-\\mathbb{E}_\\mathbb{Q}[D]$?",
+    "options": [
+      "A) $(\\psi_0,\\psi_1)=(0,0)$",
+      "B) $(\\psi_0,\\psi_1)=(1,-1)$",
+      "C) Any $(\\psi_0,\\psi_1)$ with $\\psi_0=-\\psi_1$.",
+      "D) $(\\psi_0,\\psi_1)=(-1/6,1/6)$ — saturates the Lipschitz-1 constraint."
+    ],
+    "answer": "D",
+    "explanation": "Lipschitz-1 forces $\\psi_0+\\psi_1=0$ and $|6\\psi_0|\\le 1$. The objective $-5\\psi_0+\\psi_1=-6\\psi_0$ is maximized at $\\psi_0=-1/6,\\psi_1=1/6$."
+  },
+  {
+    "id": "mcq-2023-01",
+    "source": "2023",
+    "question": "Bidirectional RNN: $h_t^{(f)}=\\tanh(Wx_t+Vh_{t-1}^{(f)})$, $\\hat y_t=q^\\top h_{t+1}^{(f)}+r^\\top h_{t-1}^{(b)}$, loss $\\mathcal L=\\tfrac12\\sum_t(y_t-\\hat y_t)^2$. Which gives $\\nabla_{h_t^{(f)}}L$?",
+    "options": [
+      "A) $(\\hat y_t-y_t)q+V^\\top[(1-\\tanh^2(Wx_{t+1}+Vh_t^{(f)}))\\odot\\nabla_{h_{t+1}^{(f)}}L]$",
+      "B) $(\\hat y_{t-1}-y_{t-1})q+V^\\top[(1-\\tanh^2(Wx_{t+1}+Vh_t^{(f)}))\\odot\\nabla_{h_{t+1}^{(f)}}L]$",
+      "C) $(\\hat y_t-y_t)q+V^\\top[(1-\\tanh^2(Wx_t+Vh_{t-1}^{(f)}))\\odot\\nabla_{h_{t+1}^{(f)}}L]$",
+      "D) $(\\hat y_{t-1}-y_{t-1})q+V^\\top[(1-\\tanh^2(Wx_t+Vh_{t-1}^{(f)}))\\odot\\nabla_{h_{t+1}^{(f)}}L]$"
+    ],
+    "answer": "B",
+    "explanation": "Since $\\hat y_t$ uses $h_{t+1}^{(f)}$, the direct contribution to $h_t^{(f)}$ comes from $\\hat y_{t-1}$; the recurrent term uses $\\tanh'$ at the pre-activation $Wx_{t+1}+Vh_t^{(f)}$."
+  },
+  {
+    "id": "mcq-2023-02",
+    "source": "2023",
+    "question": "The variational gap splits into approximation gap + amortization gap. Which change reduces the amortization gap (leaving the approximation gap unchanged)?",
+    "options": [
+      "A) Increasing encoder capacity for $q_\\phi(z\\mid x)$.",
+      "B) Decreasing the weight on the KL term in the ELBO.",
+      "C) Adding a GAN-like adversarial term.",
+      "D) Using IAF as the encoder to model non-factorial $q$."
+    ],
+    "answer": "A",
+    "explanation": "The amortization gap arises because one encoder cannot reach the best-in-family $q^*$ per example — a larger encoder reduces it. IAF enlarges the variational family (reduces the approximation gap)."
+  },
+  {
+    "id": "mcq-2022-01",
+    "source": "2022",
+    "question": "Normalizing flows require invertible maps. Which are invertible on $(-\\infty,\\infty)$? (a) $g(z)=a\\,\\mathrm{ReLU}(bz+c)$, $a,b>0$; (b) $g(z)=\\sigma^{-1}(\\sum_i w_i\\sigma(a_iz+b_i))$ with $0<w_i<1$, $\\sum w_i=1$, $a_i>0$; (c) $g(z)=z+\\mathrm{ReLU}(bz+c)$.",
+    "options": [
+      "A) (a) only",
+      "B) (b) only",
+      "C) (b) and (c)",
+      "D) All of these",
+      "E) None of these"
+    ],
+    "answer": "C",
+    "explanation": "(a) fails since ReLU is flat for negatives. (b) each $\\sigma(a_iz+b_i)$ is strictly increasing with $a_i>0$; weighted sum with positive weights is strictly increasing; $\\sigma^{-1}$ preserves it. (c) slope $\\ge 1$ everywhere."
+  },
+  {
+    "id": "mcq-2022-02",
+    "source": "2022",
+    "question": "Dirac-WGAN: match $\\mathbb{P}=\\delta_0$ with $\\mathbb{Q}=\\delta_\\theta$ using critic $C(x;\\psi_0,\\psi_1)=\\psi_0 x+\\psi_1$. Which tuple(s) $(\\psi_0,\\psi_1,\\theta)$ are equilibria?",
+    "options": [
+      "A) $(0,-0.5,0)$",
+      "B) $(0,1,0)$",
+      "C) $(0,0,0)$",
+      "D) All of these",
+      "E) None of these"
+    ],
+    "answer": "D",
+    "explanation": "When $\\psi_0=0$ the critic is constant in $x$, so gradients w.r.t. $\\theta$ vanish; and $\\theta=0$ sets $\\mathbb{P}=\\mathbb{Q}$, so the critic has no signal."
+  },
+  {
+    "id": "mcq-2022-03",
+    "source": "2022",
+    "question": "RNN $h_t=\\tanh(Wx_t+Ux_{t-1}+Vh_{t-1})$, $\\hat y_t=q^\\top h_t+r^\\top h_{t-1}$, $\\mathcal L=\\tfrac12\\sum_t(y_t-\\hat y_t)^2$. Which is $\\nabla_{\\hat y_t}\\mathcal L$?",
+    "options": [
+      "A) $(y_t-\\hat y_t)/2$",
+      "B) $|\\hat y_t-y_t|$",
+      "C) $(y_t-\\hat y_t)^2$",
+      "D) $\\hat y_t-y_t$"
+    ],
+    "answer": "D",
+    "explanation": "Differentiating $\\tfrac12(y_t-\\hat y_t)^2$ w.r.t. $\\hat y_t$ gives $\\hat y_t-y_t$."
+  },
+  {
+    "id": "mcq-2022-04",
+    "source": "2022",
+    "question": "For the same RNN, which gives $\\nabla_{h_t}L$?",
+    "options": [
+      "A) $(\\hat y_{t-1}-y_{t-1})q+(\\hat y_t-y_t)r+V^\\top[(1-\\tanh^2(Wx_{t+1}+Ux_t+Vh_t))\\odot\\nabla_{h_{t+1}}L]$",
+      "B) $(\\hat y_t-y_t)q+(\\hat y_{t+1}-y_{t+1})r+V^\\top[(1-\\tanh^2(Wx_{t+1}+Ux_t+Vh_t))\\odot\\nabla_{h_{t+1}}L]$",
+      "C) $(\\hat y_t-y_t)q+(\\hat y_{t+1}-y_{t+1})r+V^\\top[(1-\\tanh^2(Wx_t+Ux_{t-1}+Vh_{t-1}))\\odot\\nabla_{h_{t+1}}L]$",
+      "D) $(\\hat y_t-y_t)q+(\\hat y_{t+1}-y_{t+1})r+V^\\top[(1-\\tanh^2(Wx_{t-1}+Ux_t+Vh_{t-1}))\\odot\\nabla_{h_{t-1}}L]$"
+    ],
+    "answer": "B",
+    "explanation": "$h_t$ enters $\\hat y_t$ via $q$ and $\\hat y_{t+1}$ via $r$; its flow into $h_{t+1}$ uses the $t{+}1$ pre-activation $Wx_{t+1}+Ux_t+Vh_t$."
+  },
+  {
+    "id": "mcq-2022-05",
+    "source": "2022",
+    "question": "VAE with $z\\sim\\mathcal{N}(0,I)$, decoder $p_\\theta(x\\mid z)$, encoder $q_\\phi(z\\mid x)$. Which expression equals $\\log p_\\theta(x)$?",
+    "options": [
+      "A) $\\mathbb{E}_{z\\sim q}\\log\\tfrac{p(x,z)}{q(z|x)}-\\mathbb{E}_{z\\sim q}\\log\\tfrac{p(z|x)}{q(z|x)}$",
+      "B) $\\mathbb{E}_{z\\sim q}\\log\\tfrac{p(x,z)}{q(z|x)}-\\mathbb{E}_{z\\sim q}\\log\\tfrac{p(z,x)}{p(x)q(z|x)}$",
+      "C) $\\mathbb{E}_{z\\sim q}\\log p(x)$",
+      "D) All of these",
+      "E) None of these"
+    ],
+    "answer": "D",
+    "explanation": "All three reduce to $\\log p(x)$: (A) ELBO plus KL; (B) telescopes since $p(z,x)/(p(x)q)=p(z|x)/q$; (C) trivial since $\\log p(x)$ is constant in $z$."
+  }
+]

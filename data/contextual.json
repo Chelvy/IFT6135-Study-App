@@ -1,0 +1,314 @@
+[
+  {
+    "id": "ctx-2023-01",
+    "source": "2023",
+    "question": "Consider the SSL method described as: 'Introduces a queue of negative samples to decouple the number of negative samples from the batch size.' Which SSL algorithm does this correspond to?",
+    "options": [
+      "A) MoCo (Momentum Contrast)",
+      "B) SimCLR",
+      "C) BYOL",
+      "D) Barlow Twins"
+    ],
+    "answer": "A",
+    "explanation": "MoCo maintains a dynamic dictionary as a queue of encoded keys, so the number of negatives is decoupled from the mini-batch size. SimCLR, by contrast, depends on a large batch for negatives."
+  },
+  {
+    "id": "ctx-2023-02",
+    "source": "2023",
+    "question": "Which SSL method is best described as 'the contrastive version of the SplitBrain Autoencoder', using two views (e.g. different channels/modalities of the same scene) with a contrastive objective?",
+    "options": [
+      "A) SimCLR",
+      "B) BYOL",
+      "C) CMC (Contrastive Multiview Coding)",
+      "D) SimSiam"
+    ],
+    "answer": "C",
+    "explanation": "CMC generalizes SplitBrain by replacing the reconstruction loss with a contrastive objective across multiple views/channels of the same scene."
+  },
+  {
+    "id": "ctx-2023-03",
+    "source": "2023",
+    "question": "Which SSL algorithm is: 'Similar to SimCLR but does not need negative samples, and introduces an EMA (Exponential Moving Average) target network'?",
+    "options": [
+      "A) MoCo",
+      "B) BYOL (Bootstrap Your Own Latent)",
+      "C) Barlow Twins",
+      "D) SimSiam"
+    ],
+    "answer": "B",
+    "explanation": "BYOL uses an online network and an EMA target network; the online predictor is trained to match the target representation, removing the need for negatives."
+  },
+  {
+    "id": "ctx-2023-04",
+    "source": "2023",
+    "question": "Which SSL algorithm 'uses a projector after the encoder to increase the dimensionality of the representation to apply a cross-correlation loss' that pushes the empirical cross-correlation matrix between two augmented views toward the identity?",
+    "options": [
+      "A) SimCLR",
+      "B) SimSiam",
+      "C) Barlow Twins",
+      "D) MoCo v3"
+    ],
+    "answer": "C",
+    "explanation": "Barlow Twins enforces the cross-correlation matrix between embeddings of two distorted views to be close to the identity (redundancy reduction); a high-dim projector makes the loss effective."
+  },
+  {
+    "id": "ctx-2023-05",
+    "source": "2023",
+    "question": "Compared to traditional variational inference (optimizing $q_\\phi$ individually per $x_i$), amortized inference (one encoder for all $x$) generally has what property?",
+    "options": [
+      "A) Per-example inference achieves a lower or equal KL than the shared amortized encoder.",
+      "B) Amortized inference always achieves strictly lower KL than per-example inference.",
+      "C) Amortized and per-example inference achieve exactly the same KL.",
+      "D) Amortized inference removes the approximation gap entirely."
+    ],
+    "answer": "A",
+    "explanation": "Sharing a single encoder across all data points introduces an amortization gap, so the expected KL is at least as large as under per-example optimal $q^*_i$."
+  },
+  {
+    "id": "ctx-2023-06",
+    "source": "2023",
+    "question": "In a VAE, one way to reduce the amortization gap (while leaving the approximation gap unchanged) is to:",
+    "options": [
+      "A) Increase the capacity of the encoder network parameterizing $q_\\phi(z\\mid x)$.",
+      "B) Decrease the weight of the KL$(q_\\phi(z\\mid x)\\|p(z))$ term in the objective.",
+      "C) Include a GAN-like adversarial term.",
+      "D) Use IAF in the encoder to model non-factorial distributions."
+    ],
+    "answer": "A",
+    "explanation": "A larger encoder can produce closer-to-optimal $q$ for each $x$ without changing the variational family (which would affect the approximation gap)."
+  },
+  {
+    "id": "ctx-2024-01",
+    "source": "2024",
+    "question": "You are training an LLM with RLHF and want the REINFORCE estimator to maximize $\\mathbb{E}_{\\hat s\\sim p_\\theta}[R(\\hat s)]$. Which expression correctly gives the gradient?",
+    "options": [
+      "A) $\\mathbb{E}_{\\hat s\\sim p_\\theta}[R(\\hat s)\\nabla_\\theta\\log p_\\theta(\\hat s)]$",
+      "B) $\\nabla_\\theta R(\\hat s)$ for any sampled $\\hat s$",
+      "C) $\\mathbb{E}_{\\hat s\\sim p_\\theta}[\\nabla_\\theta R(\\hat s)]$",
+      "D) $\\mathbb{E}_{\\hat s\\sim p_\\theta}[\\log R(\\hat s)\\nabla_\\theta p_\\theta(\\hat s)]$"
+    ],
+    "answer": "A",
+    "explanation": "Standard score-function / log-derivative identity used when $R$ is not differentiable in $\\theta$."
+  },
+  {
+    "id": "ctx-2024-02",
+    "source": "2024",
+    "question": "Which three-step pipeline is used in InstructGPT to fine-tune a language model?",
+    "options": [
+      "A) (1) Supervised fine-tuning on human demonstrations; (2) train a reward model from human preference comparisons (Bradley-Terry); (3) RL fine-tuning (PPO) of the policy against the reward model.",
+      "B) (1) Unsupervised pretraining; (2) contrastive learning on token pairs; (3) distillation into a smaller model.",
+      "C) (1) Train a reward model from scratch; (2) supervised fine-tuning; (3) adversarial fine-tuning.",
+      "D) (1) RLHF first; (2) then supervised fine-tuning; (3) then pretraining from scratch."
+    ],
+    "answer": "A",
+    "explanation": "InstructGPT: SFT on demonstrations, then a reward model trained from human preference rankings (Bradley-Terry), then policy optimization against that reward model via PPO."
+  },
+  {
+    "id": "ctx-2024-03",
+    "source": "2024",
+    "question": "Why is the Bradley-Terry paired comparison model used for training the RLHF reward model?",
+    "options": [
+      "A) It regresses absolute scores directly.",
+      "B) Humans rank pairs more reliably than giving absolute scores; Bradley-Terry converts pairwise preferences into a consistent scalar reward.",
+      "C) It removes the need for any human labels.",
+      "D) It ensures the reward model is invertible."
+    ],
+    "answer": "B",
+    "explanation": "Pairwise preferences are more reliable; Bradley-Terry parameterizes $P(a\\succ b)=\\sigma(r(a)-r(b))$, letting a latent scalar reward be learned from comparisons."
+  },
+  {
+    "id": "ctx-2024-04",
+    "source": "2024",
+    "question": "In PixelCNN, mask type A zeroes the current pixel and all 'future' pixels in the kernel, while mask type B keeps the current pixel. To ensure a valid autoregressive receptive field, which combination is required between the first and subsequent conv layers?",
+    "options": [
+      "A) Mask A for the first layer, mask B for all subsequent layers.",
+      "B) Mask B for the first layer, mask A for all subsequent layers.",
+      "C) Mask A for every layer.",
+      "D) Mask B for every layer."
+    ],
+    "answer": "A",
+    "explanation": "The first layer must use mask A so output at pixel $i$ doesn't depend on input pixel $i$. Deeper layers can use mask B because the feature at position $i$ already excludes information about input pixel $i$."
+  },
+  {
+    "id": "ctx-2024-05",
+    "source": "2024",
+    "question": "You are designing a normalizing-flow generative model. Which two properties must the neural network have?",
+    "options": [
+      "A) It must be differentiable and invertible, with a tractable Jacobian determinant.",
+      "B) It must be non-invertible but have a tractable Hessian.",
+      "C) It must be a contraction mapping with Lipschitz constant less than 1.",
+      "D) It must be stochastic and have a tractable variance."
+    ],
+    "answer": "A",
+    "explanation": "Change-of-variables requires invertible differentiable maps with a tractable log-determinant of the Jacobian; otherwise exact likelihood is infeasible."
+  },
+  {
+    "id": "ctx-2024-06",
+    "source": "2024",
+    "question": "WGAN with critic $D(x;\\psi_0,\\psi_1)=\\psi_0(x+2)^2+\\psi_1(x-1)^2$ to match $\\mathbb{P}=\\delta_0$ from $\\mathbb{Q}=\\delta_1$, under Lipschitz-1 constraint. Which $(\\psi_0,\\psi_1)$ maximizes the critic's objective?",
+    "options": [
+      "A) $(0,0)$",
+      "B) $(1,1)$",
+      "C) Values that saturate the Lipschitz-1 constraint so that $D$ has slope $\\pm 1$ on $[0,1]$ — e.g. $(-1/6, 1/6)$.",
+      "D) Any $(\\psi_0,\\psi_1)$ with $|\\psi_0|+|\\psi_1|>1$."
+    ],
+    "answer": "C",
+    "explanation": "Under Lipschitz-1 and the dual form of $W_1$, the optimal critic is a 1-Lipschitz function proportional to signed distance between supports; $(\\psi_0,\\psi_1)=(-1/6,1/6)$ saturates the constraint and maximizes the objective."
+  },
+  {
+    "id": "ctx-2025-01",
+    "source": "2025",
+    "question": "A known problem with self-attention in very deep Transformers is that softmax can concentrate mass on a few tokens. Which statement correctly describes the issue AND a standard remedy?",
+    "options": [
+      "A) Deep Transformers suffer vanishing gradients because dot products become too small; fix by increasing key dimension.",
+      "B) Softmax can concentrate attention on a few tokens, ignoring the rest; mitigated by multi-head attention, which attends to multiple subspaces.",
+      "C) Attention weights become uniform with depth; fix by reducing softmax temperature.",
+      "D) Fixed positional encodings lose information; fix by using relative positional encodings."
+    ],
+    "answer": "B",
+    "explanation": "Multi-head attention provides multiple independent attention patterns in different subspaces, reducing the risk of a single softmax over-concentrating on a few tokens."
+  },
+  {
+    "id": "ctx-2025-02",
+    "source": "2025",
+    "question": "What is the key advantage of relative positional embeddings over absolute ones in Transformers?",
+    "options": [
+      "A) They eliminate the fixed-length requirement on input sequences.",
+      "B) They reduce attention complexity from quadratic to linear.",
+      "C) They reduce the dimensionality of positional representations.",
+      "D) They generalize better to variable-length and shifted contexts by encoding position differences."
+    ],
+    "answer": "D",
+    "explanation": "Relative encodings depend on $i-j$ rather than absolute $i$, so the same relationships generalize across shifts and longer sequences not seen at training time."
+  },
+  {
+    "id": "ctx-2025-03",
+    "source": "2025",
+    "question": "Which statement correctly explains a fundamental advantage of Transformer-XL over standard Transformers?",
+    "options": [
+      "A) It caches hidden states across segment boundaries via a recurrence, enabling long-range dependencies without recomputing prior-segment attention.",
+      "B) It uses a fixed-length context window per segment.",
+      "C) It reduces input dimensionality via relative position encodings.",
+      "D) It reduces self-attention to linear complexity by truncating the attention matrix."
+    ],
+    "answer": "A",
+    "explanation": "Transformer-XL caches hidden states from the previous segment (with relative positions), giving longer effective context without recomputing attention over earlier tokens."
+  },
+  {
+    "id": "ctx-2025-04",
+    "source": "2025",
+    "question": "Why is LoRA frequently used when fine-tuning LLMs with RLHF?",
+    "options": [
+      "A) LoRA increases expressive power by adding many trainable parameters.",
+      "B) LoRA restricts updates to a low-rank subspace, enabling efficient fine-tuning while preserving pre-trained capabilities.",
+      "C) LoRA incorporates preference scores directly into the parameterization.",
+      "D) LoRA replaces policy-gradient, making RLHF redundant."
+    ],
+    "answer": "B",
+    "explanation": "LoRA freezes base weights and learns small low-rank factors $A,B$ so $\\Delta W=AB^\\top$; much less memory/compute, and most of the pretrained backbone is preserved."
+  },
+  {
+    "id": "ctx-2025-05",
+    "source": "2025",
+    "question": "Which statement correctly captures a key difference between SimCLR and BYOL?",
+    "options": [
+      "A) Both require explicit negative pairs; BYOL uses a momentum encoder.",
+      "B) Both use symmetric contrastive losses; BYOL adds a temperature parameter.",
+      "C) SimCLR uses a momentum encoder; BYOL uses batch normalization to avoid collapse.",
+      "D) SimCLR uses negative pairs in the contrastive loss; BYOL does not — it aligns online and target networks without negatives."
+    ],
+    "answer": "D",
+    "explanation": "SimCLR is contrastive (positives vs negatives). BYOL avoids negatives entirely, predicting the target (EMA) network's representation from the online network."
+  },
+  {
+    "id": "ctx-2025-06",
+    "source": "2025",
+    "question": "In a DDPM with forward process $q(x_t|x_{t-1})=\\mathcal{N}(x_t;\\sqrt{1-\\beta_t}x_{t-1},\\beta_t I)$, which statement about the reverse $p_\\theta(x_{t-1}|x_t)$ is true?",
+    "options": [
+      "A) It is deterministic to ensure exact inversion of the forward process.",
+      "B) It is modeled as a Gaussian with learned mean and fixed variance.",
+      "C) It must condition on all $x_0,\\dots,x_{t-1}$.",
+      "D) It shares parameters with the forward process for symmetry."
+    ],
+    "answer": "B",
+    "explanation": "For small $\\beta_t$, the true reverse conditional is approximately Gaussian; DDPM parameterizes $p_\\theta(x_{t-1}|x_t)=\\mathcal{N}(x_{t-1};\\mu_\\theta,\\sigma_t^2 I)$ with fixed schedule variance."
+  },
+  {
+    "id": "ctx-2025-07",
+    "source": "2025",
+    "question": "The DDPM ELBO uses $q(x_{t-1}|x_t,x_0)$ as a per-step target. Which best describes how this enables training?",
+    "options": [
+      "A) It matches reverse outputs to data via a reconstruction loss.",
+      "B) It maximizes the likelihood of each noise sample independently.",
+      "C) It approximates the posterior over $x_{t-1}$ using $x_t,x_0$, and penalizes deviation of the learned reverse from it.",
+      "D) It computes the JSD between forward and reverse trajectories."
+    ],
+    "answer": "C",
+    "explanation": "$q(x_{t-1}|x_t,x_0)$ is a tractable Gaussian target, and the KL at each step trains $p_\\theta(x_{t-1}|x_t)$ to match it."
+  },
+  {
+    "id": "ctx-2025-08",
+    "source": "2025",
+    "question": "Modern DDPMs reparameterize the reverse process as noise prediction — given $x_t=\\sqrt{\\bar\\alpha_t}x_0+\\sqrt{1-\\bar\\alpha_t}\\epsilon$, the network predicts $\\epsilon$. Why is this advantageous?",
+    "options": [
+      "A) It allows cross-entropy loss instead of KL divergence.",
+      "B) It avoids computing forward-process variance.",
+      "C) Predicting $\\epsilon$ yields a simple tractable MSE objective that aligns with the variational bound.",
+      "D) It decouples denoising from generation, enabling parallel sampling."
+    ],
+    "answer": "C",
+    "explanation": "Reparameterizing the mean in terms of predicted noise turns the per-step KL into a simple weighted MSE matching the ELBO up to known weights."
+  },
+  {
+    "id": "ctx-2025-09",
+    "source": "2025",
+    "question": "Consider a single-step RL problem with policy $\\pi_\\theta(a)=e^{\\theta a}/\\sum_{a'}e^{\\theta a'}$, $\\mathcal A=\\{1,2\\}$, rewards $R(1)=4$, $R(2)=8$. Using REINFORCE, what is $\\nabla_\\theta J(\\theta)$?",
+    "options": [
+      "A) $\\dfrac{4e^\\theta+8e^{2\\theta}}{(e^\\theta+e^{2\\theta})^2}$",
+      "B) $\\dfrac{4e^\\theta+16e^{3\\theta}}{(e^\\theta+e^{2\\theta})^3}$",
+      "C) $\\dfrac{4e^{3\\theta}}{(e^\\theta+e^{2\\theta})^2}$",
+      "D) $\\dfrac{4e^\\theta(e^\\theta+2e^{2\\theta})}{(e^\\theta+e^{2\\theta})^2}$"
+    ],
+    "answer": "C",
+    "explanation": "Direct computation yields $4e^{3\\theta}/(e^\\theta+e^{2\\theta})^2$."
+  },
+  {
+    "id": "ctx-2025-10",
+    "source": "2025",
+    "question": "In a modified CLIP setup, we contrast joint embedding $f(I,T)$ with a text-only embedding $g(T)$. To avoid both collapse AND the degenerate solution where $f$ ignores $I$, which sampling strategy works?",
+    "options": [
+      "A) Positives: $(f(I_i,T_i), g(T_i))$; Negatives: $(f(I_i,T_{j\\ne i}), g(T_{j\\ne i}))$.",
+      "B) Positives: $(f(I_i,T_i), f(I_j,T_j))$; Negatives: $(g(T_i), g(T_j))$.",
+      "C) Positives: $(f(I_i,T_i), g(T_i))$; Negatives: $(g(T_i), g(T_j))$.",
+      "D) Positives: $(f(I_i,T_j), g(T_i))$ with $I_j\\sim I_i$; Negatives: $(f(I_i,T_{j\\ne i}), g(T_{j\\ne i}))$."
+    ],
+    "answer": "A",
+    "explanation": "Using in-batch mismatched image-text pairs $(I_i,T_{j\\ne i})$ as negatives forces $f$ to depend on $I$; contrasting $g(T_{j\\ne i})$ prevents collapse to a constant embedding."
+  },
+  {
+    "id": "ctx-2022-01",
+    "source": "2022",
+    "question": "Normalizing flows require an invertible map $g:\\mathbb R\\to\\mathbb R$. Which candidate(s) are invertible on $(-\\infty,\\infty)$? (i) $g(z)=af(bz+c)$, $f=\\mathrm{ReLU}$, $a,b>0$; (ii) $g(z)=\\sigma^{-1}(\\sum_i w_i\\sigma(a_iz+b_i))$ with $0<w_i<1$, $\\sum w_i=1$, $a_i>0$; (iii) $g(z)=z+\\mathrm{ReLU}(bz+c)$.",
+    "options": [
+      "A) Only (i)",
+      "B) Only (ii)",
+      "C) (ii) and (iii) only",
+      "D) All three"
+    ],
+    "answer": "C",
+    "explanation": "(i) fails: ReLU is constant on negatives. (ii) sum of strictly increasing sigmoids with positive weights, composed with strictly increasing $\\sigma^{-1}$ — invertible. (iii) derivative $\\ge 1$ — invertible."
+  },
+  {
+    "id": "ctx-2022-02",
+    "source": "2022",
+    "question": "To estimate the variational gap using $K$ i.i.d. samples from $q_\\phi(z|x)$ on a test set, which expression gives a valid practical estimate (IWAE bound minus single-sample ELBO)?",
+    "options": [
+      "A) $\\log\\big[\\tfrac{1}{K}\\sum_{k=1}^K\\tfrac{p(x,z_k)}{q_\\phi(z_k|x)}\\big]-\\tfrac{1}{K}\\sum_{k=1}^K\\big[\\log p(x,z_k)-\\log q_\\phi(z_k|x)\\big]$",
+      "B) $\\log\\big[\\tfrac{1}{K}\\sum_k\\tfrac{p(x,z_k)}{q_\\phi(z_k|x)}\\big]$ alone.",
+      "C) $\\log\\big[\\tfrac{1}{K}\\sum_k\\tfrac{p(z_k|x)}{q_\\phi(z_k|x)}\\big]$",
+      "D) None of these"
+    ],
+    "answer": "A",
+    "explanation": "The IWAE estimator $\\log\\tfrac{1}{K}\\sum p(x,z_k)/q(z_k|x)$ is a tighter lower bound on $\\log p(x)$ than the single-sample ELBO; the difference estimates the variational gap."
+  }
+]
